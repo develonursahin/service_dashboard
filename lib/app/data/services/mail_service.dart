@@ -6,17 +6,8 @@ import 'package:service_dashboard/app/core/constants/app_secrets.dart';
 import 'package:service_dashboard/app/core/enums/service_path.dart';
 import 'package:service_dashboard/app/core/manager/network_manager.dart';
 import 'package:service_dashboard/app/data/models/service/service_model.dart';
-import 'package:service_dashboard/app/presentation/dashboard/viewmodel/dashboard_view_model.dart';
 
 class MailService extends GetxService {
-  final DashboardViewModel dashboardViewModel = Get.find();
-
-  /// E-posta gönderme fonksiyonu
-  ///
-  /// [subject]: E-postanın konusu
-  /// [message]: E-postanın gövde metni
-  /// [ccList]: CC yapılacak e-posta adresleri
-  /// [failedServices]: Hatalı servislerin listesi
   Future<void> sendFailureAlert({
     required String subject,
     required String message,
@@ -31,7 +22,7 @@ class MailService extends GetxService {
       final emailBody = '''
 ${AppSecrets.companyName} - Hatalı Servis/Cihaz Uyarısı
 
-Son ${dashboardViewModel.maxFailureCount} denemede aşağıdaki listede yer alan servis/cihazlara erişilememektedir:
+Son denemelerde aşağıdaki listede yer alan servis/cihazlara erişilememektedir:
 
 $textContent
 
