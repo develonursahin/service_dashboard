@@ -8,6 +8,7 @@ import 'package:service_dashboard/app/core/extensions/string/string_extension.da
 import 'package:service_dashboard/app/core/extensions/widget/widget_extension.dart';
 import 'package:service_dashboard/app/data/models/service/service_model.dart';
 import 'package:service_dashboard/app/presentation/dashboard/viewmodel/dashboard_view_model.dart';
+import 'package:service_dashboard/app/presentation/services/detail/view/service_detail_view.dart';
 
 class ServiceControlTableWidget extends StatelessWidget {
   ServiceControlTableWidget({super.key});
@@ -16,7 +17,7 @@ class ServiceControlTableWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DashboardViewModel controller = Get.find();
-
+    ScrollController scrollController = ScrollController();
     Rx<String> sortOption = 'Service Name'.obs;
     Rx<bool> isAscOrder = true.obs;
     Rx<String> searchQuery = ''.obs;
@@ -103,7 +104,9 @@ class ServiceControlTableWidget extends StatelessWidget {
                     break;
                 }
 
-                return SingleChildScrollView(
+                return Scrollbar(
+                  scrollbarOrientation: ScrollbarOrientation.bottom,
+                  controller: scrollController,
                   child: DataTable(
                     sortColumnIndex:
                         ['Service Name', 'Device Name', 'Last Checked'].indexOf(sortOption.value),
@@ -195,6 +198,7 @@ class ServiceControlTableWidget extends StatelessWidget {
                               [];
 
                       return DataRow(
+                        onLongPress: () => Get.to(() => ServiceDetailView(serviceId: service.id!)),
                         cells: [
                           DataCell(Text(
                             service.name ?? 'Bilinmiyor',
@@ -202,42 +206,10 @@ class ServiceControlTableWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           )),
                           DataCell(
-                            GestureDetector(
-                              onTap: service.status != false
-                                  ? () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          backgroundColor: AppColor.background,
-                                          title: Text("Cihazlar"),
-                                          content: SizedBox(
-                                            width: double.maxFinite,
-                                            child: ListView.builder(
-                                              itemCount: failedDevices.length,
-                                              itemBuilder: (context, index) {
-                                                return ListTile(
-                                                  title: Text(
-                                                    failedDevices[index],
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.of(context).pop(),
-                                              child: Text("Kapat"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  : null,
-                              child: Text(
-                                failedDevices.join(', '),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
+                            Text(
+                              failedDevices.join(', '),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
                           ),
                           DataCell(Text(service.lastChecked?.toFormattedDate(isHour: true) ?? '')),

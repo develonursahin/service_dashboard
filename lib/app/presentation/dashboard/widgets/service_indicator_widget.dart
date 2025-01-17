@@ -6,7 +6,7 @@ import 'package:service_dashboard/app/core/constants/app_text_style.dart';
 import 'package:service_dashboard/app/core/enums/service_type.dart';
 import 'package:service_dashboard/app/core/extensions/widget/widget_extension.dart';
 import 'package:service_dashboard/app/data/models/service/service_model.dart';
-import 'package:service_dashboard/app/presentation/services/view/services_view.dart';
+import 'package:service_dashboard/app/presentation/services/list/view/services_view.dart';
 
 class ServiceIndicator extends StatelessWidget {
   final ServiceType serviceType;

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:service_dashboard/app/core/constants/app_color.dart';
 import 'package:service_dashboard/app/core/enums/service_type.dart';
 import 'package:get/get.dart';
+import 'package:service_dashboard/app/core/extensions/widget/widget_extension.dart';
 import 'package:service_dashboard/app/data/models/service/service_model.dart';
-import 'package:service_dashboard/app/presentation/services/viewmodel/services_view_model.dart';
+import 'package:service_dashboard/app/presentation/services/detail/view/service_detail_view.dart';
+import 'package:service_dashboard/app/presentation/services/list/viewmodel/services_view_model.dart';
 
 class ServicesView extends StatelessWidget {
   final ServiceType serviceType;
@@ -53,6 +55,8 @@ class ServicesView extends StatelessWidget {
                     ),
                   ),
                 ),
+              ).gestureDetector(
+                onTap: () => Get.to(() => ServiceDetailView(serviceId: service.id!)),
               );
             },
           ),

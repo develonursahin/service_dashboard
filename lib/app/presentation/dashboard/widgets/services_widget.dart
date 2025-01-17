@@ -7,7 +7,8 @@ import 'package:service_dashboard/app/core/extensions/context/context_extension.
 import 'package:service_dashboard/app/core/extensions/widget/widget_extension.dart';
 import 'package:service_dashboard/app/data/models/service/service_model.dart';
 import 'package:service_dashboard/app/presentation/dashboard/widgets/circular_progress_widget.dart';
-import 'package:service_dashboard/app/presentation/services/view/services_view.dart';
+import 'package:service_dashboard/app/presentation/services/detail/view/service_detail_view.dart';
+import 'package:service_dashboard/app/presentation/services/list/view/services_view.dart';
 
 class ServicesWidget extends StatelessWidget {
   final RxList<ServiceModel> services;
@@ -94,6 +95,8 @@ class ServicesWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
+                        ).gestureDetector(
+                          onTap: () => Get.to(() => ServiceDetailView(serviceId: service.id!)),
                         );
                       },
                     ),
