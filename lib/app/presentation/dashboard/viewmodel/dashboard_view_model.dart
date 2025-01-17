@@ -21,7 +21,7 @@ class DashboardViewModel extends GetxController {
   Rx<LoadingStatus> loadingStatus = LoadingStatus.initial.obs;
   Rx<DateTime?> fetchedTime = Rx<DateTime?>(null);
   Timer? _timer;
-  int refreshTime = 10;
+  int refreshTime = 900;
   final int maxFailureCount = 3;
 
   var tempFailureCount = <int, int>{};
@@ -86,7 +86,7 @@ class DashboardViewModel extends GetxController {
 
     for (var service in runningServices) {
       if (tempFailureCount.containsKey(service.id)) {
-        tempFailureCount.remove(service.id); 
+        tempFailureCount.remove(service.id);
       }
     }
 
@@ -103,8 +103,8 @@ class DashboardViewModel extends GetxController {
       );
 
       for (var id in servicesToNotify.toList()) {
-        tempFailureCount.remove(id); 
-        servicesToNotify.remove(id); 
+        tempFailureCount.remove(id);
+        servicesToNotify.remove(id);
       }
     }
     update();

@@ -54,9 +54,19 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColor.primary, AppColor.secondary],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              colors: [
+                AppColor.secondary,
+                AppColor.secondary,
+                AppColor.primary,
+                AppColor.primary,
+                AppColor.primary,
+                AppColor.primary,
+                AppColor.primary,
+                AppColor.secondary,
+                AppColor.secondary
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
           ),
         ),
@@ -68,8 +78,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: AppColor.secondary.withOpacity(0.9),
-                  borderRadius: context.borderVerticalBottom28Radius),
+                  color: AppColor.secondary, borderRadius: context.borderVerticalBottom28Radius),
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Obx(() {
                 final fetchedTime = dashboardViewModel.fetchedTime.value;
