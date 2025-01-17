@@ -21,8 +21,8 @@ class DashboardViewModel extends GetxController {
   Rx<LoadingStatus> loadingStatus = LoadingStatus.initial.obs;
   Rx<DateTime?> fetchedTime = Rx<DateTime?>(null);
   Timer? _timer;
-  int refreshTime = 900;
   final int maxFailureCount = 3;
+  Rx<int> remainingTimeInSeconds = 0.obs;
 
   var tempFailureCount = <int, int>{};
   var servicesToNotify = <int>{};
@@ -31,10 +31,7 @@ class DashboardViewModel extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     await fetchServices();
-
-    _timer = Timer.periodic(Duration(seconds: refreshTime), (_) {
-      fetchServices();
-    });
+    _startTimer();
   }
 
   @override
@@ -48,9 +45,7 @@ class DashboardViewModel extends GetxController {
 
     if (manualRefresh) {
       _timer?.cancel();
-      _timer = Timer.periodic(Duration(seconds: refreshTime), (_) {
-        fetchServices();
-      });
+      _startTimer();
     }
 
     try {
@@ -72,6 +67,39 @@ class DashboardViewModel extends GetxController {
     } finally {
       update();
     }
+  }
+
+  void _startTimer() {
+    final now = DateTime.now();
+    final durationUntilNextRefresh = _calculateNextRefreshDuration(now);
+    remainingTimeInSeconds.value = getSecondsUntilNextRefresh(now);
+
+    _timer = Timer(durationUntilNextRefresh, () {
+      fetchServices();
+      _timer = Timer.periodic(Duration(seconds: 1800), (_) {
+        fetchServices();
+      });
+    });
+  }
+
+  int getSecondsUntilNextRefresh(DateTime currentTime) {
+    final minutes = currentTime.minute;
+    final nextRefreshTime = (minutes < 30)
+        ? DateTime(currentTime.year, currentTime.month, currentTime.day, currentTime.hour, 30, 0)
+        : DateTime(
+            currentTime.year, currentTime.month, currentTime.day, currentTime.hour + 1, 0, 0);
+
+    return nextRefreshTime.difference(currentTime).inSeconds;
+  }
+
+  Duration _calculateNextRefreshDuration(DateTime currentTime) {
+    final minutes = currentTime.minute;
+    final nextRefreshTime = (minutes < 30)
+        ? DateTime(currentTime.year, currentTime.month, currentTime.day, currentTime.hour, 30, 0)
+        : DateTime(
+            currentTime.year, currentTime.month, currentTime.day, currentTime.hour + 1, 0, 0);
+
+    return nextRefreshTime.difference(currentTime);
   }
 
   Future<void> checkRepeatedFailures() async {

@@ -95,7 +95,7 @@ class CustomAppBarWidget extends StatelessWidget implements PreferredSizeWidget 
                     ),
                     CountdownWidget(
                       fetchedTime: dashboardViewModel.fetchedTime.value,
-                      refreshTime: dashboardViewModel.refreshTime,
+                      refreshTime: dashboardViewModel.remainingTimeInSeconds.value,
                     )
                   ],
                 );
